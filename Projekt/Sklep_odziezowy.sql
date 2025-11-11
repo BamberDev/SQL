@@ -176,3 +176,26 @@ WHERE
     OR cena_netto_sprzedazy IS NULL
     OR cena_brutto_sprzedazy IS NULL
     OR procent_vat_sprzedazy IS NULL;
+
+-- 17
+
+SELECT 
+    p.nazwa_produktu,
+    p.cena_netto_sprzedazy,
+    COUNT(p.id_produktu) AS ilosc_sprzedanych
+FROM Produkty AS p
+JOIN Zamowienia AS z
+ON p.id_produktu = z.id_produktu
+GROUP BY p.id_produktu
+ORDER BY ilosc_sprzedanych DESC
+LIMIT 1;
+
+-- 18
+SELECT
+    data_zamowienia AS najwiecej_zlozonych_zamowien_w_dniu,
+    COUNT(*) AS ilosc_zamowien
+FROM Zamowienia
+GROUP BY data_zamowienia
+ORDER BY ilosc_zamowien DESC
+LIMIT 1;
+
