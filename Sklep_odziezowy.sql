@@ -96,13 +96,83 @@ INSERT INTO Klienci (imie_klienta, nazwisko_klienta, adres_klienta) VALUES
 ('Łukasz', 'Grabowski', 'ul. Kościuszki 18, 90-100 Łódź');
 
 INSERT INTO Zamowienia (id_klienta, id_produktu, data_zamowienia) VALUES
-(1, 1, '2025-01-01'),
+(1, 2, '2025-01-01'),
 (2, 5, '2025-02-03'),
-(3, 14, '2025-02-05'),
+(3, 14, '2025-02-03'),
 (4, 8, '2025-03-07'),
-(5, 12, '2025-03-09'),
+(5, 2, '2025-03-09'),
 (6, 20, '2025-05-11'),
 (7, 3, '2025-05-13'),
 (8, 17, '2025-06-15'),
 (9, 9, '2025-07-17'),
 (10, 15, '2025-06-19');
+
+-- 8
+SELECT * FROM Produkty
+WHERE id_producenta = 1;
+
+-- 9
+SELECT * FROM Produkty
+WHERE id_producenta = 1
+ORDER BY nazwa_produktu ASC;
+
+-- 10
+SELECT AVG(cena_netto_sprzedazy) AS srednia_cena
+FROM Produkty
+WHERE id_producenta = 1;
+
+-- 11
+SELECT nazwa_produktu, cena_netto_sprzedazy,
+CASE 
+    WHEN cena_netto_sprzedazy <= 90 THEN 'Tanie'
+    ELSE 'Drogie'
+END AS kategoria_ceny
+FROM Produkty
+WHERE id_producenta = 1;
+
+-- 12
+SELECT p.nazwa_produktu AS zamowione_produkty, p.cena_netto_sprzedazy
+FROM Produkty AS p
+JOIN Zamowienia AS z 
+ON p.id_produktu = z.id_produktu;
+
+-- 13
+SELECT p.nazwa_produktu AS pierwsze_5_zamowionych_produktow
+FROM Produkty AS p
+JOIN Zamowienia AS z 
+ON p.id_produktu = z.id_produktu
+LIMIT 5;
+
+-- 14
+SELECT SUM(p.cena_netto_sprzedazy) AS wartosc_zamowien
+FROM Produkty AS p
+JOIN Zamowienia AS z 
+ON p.id_produktu = z.id_produktu;
+
+-- 15
+SELECT
+    z.*,
+    p.nazwa_produktu
+FROM Zamowienia AS z 
+JOIN Produkty AS p
+ON z.id_produktu = p.id_produktu
+ORDER BY z.data_zamowienia DESC;
+
+-- 16
+SELECT * FROM Produkty;
+-- Wszystkie kolumny sa wypelnione poprawnymi danymi
+
+-- Sprawdzenie brakow danych w tabeli Produkty
+SELECT * FROM Produkty
+WHERE
+    id_produktu IS NULL
+    OR id_producenta IS NULL
+    OR nazwa_produktu IS NULL
+    OR nazwa_produktu = ''
+    OR opis_produktu IS NULL
+    OR opis_produktu   = ''
+    OR cena_netto_zakupu IS NULL
+    OR cena_brutto_zakupu IS NULL
+    OR cena_netto_sprzedazy IS NULL
+    OR cena_brutto_sprzedazy IS NULL
+    OR procent_vat_sprzedazy IS NULL;
